@@ -5,7 +5,7 @@ export const validateBody = (schema) => (req, res, next) => {
         return res.status(422).json({
             success: false,
             message: "Validation failed",
-            errors: result.error.issues
+            error: result.error.issues.map(i => i.message)
         });
     }
 
