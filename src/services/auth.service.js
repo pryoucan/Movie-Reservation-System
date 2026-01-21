@@ -1,8 +1,7 @@
-import { User } from "../models/user.model";
+import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 const userRegisterService = async ({ username, mobile, email, password }) => {
-
     const existingUser = await User.findOne({
         $or: [{ username }, { mobile }, { email }]
     });
@@ -27,7 +26,6 @@ const userRegisterService = async ({ username, mobile, email, password }) => {
 
 
 const userLoginService = async ({ email, password }) => {
-
     const user = await User.findOne({ email });
     if(!user || !(await user.comparePassword(password))) {
         const error = new Error("Invalid credentials");
