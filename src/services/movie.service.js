@@ -33,12 +33,22 @@ const updateMovieService = async(id, data) => {
     const movie = await Movie.findByIdAndUpdate(id, data, { 
         new: true, runValidators: true 
     });
+    if(!movie) {
+        const error = new Error("Movie not found");
+        error.statusCode = 404;
+        throw error;
+    }
     return movie;
 };
 
 
 const deleteMovieService = async(id) => {
     const result = await Movie.findByIdAndDelete(id);
+    if(!result) {
+        const error = new Error("Movie not found");
+        error.statusCode = 404;
+        throw error;
+    }
     return result;
 };
 

@@ -1,5 +1,10 @@
-import { createMovieService, deleteMovieService, getMovieByIdService, getMovieByNameService, updateMovieService } from "../services/movie.service.js";
-
+import { 
+    createMovieService, 
+    deleteMovieService, 
+    getMovieByIdService, 
+    getMovieByNameService, 
+    updateMovieService 
+} from "../services/movie.service.js";
 
 
 const getMovieByName = async (req, res) => {
@@ -62,16 +67,16 @@ const updateMovie = async (req, res) => {
     const { id } = req.params;
     try {
         const movie = await updateMovieService(id, req.body);
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
             message: "Movie updated successfully",
             data: movie
         });
     }
     catch(error) {
-        return res.status(500).json({
+        return res.status(error?.statusCode || 500).json({
             success: false,
-            message: "Something went wrong",
+            message: error?.message || "Something went wrong",
         });
     }
 };
@@ -84,13 +89,12 @@ const deleteMovie = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Movie deleted successfully",
-            data: result.acknowledegement
         });
     }
     catch(error) {
-        return res.status(500).json({
+        return res.status(error?.statusCode || 500).json({
             success: false,
-            message: "Something went wrong"
+            message: error?.message || "Something went wrong"
         });
     }
 };
