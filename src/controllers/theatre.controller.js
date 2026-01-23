@@ -1,22 +1,16 @@
 import { 
-    getTheatreByNameService,
+    getTheatreByFilterService,
     getTheatreByIdService,
     createTheatreService,
     updateTheatreService,
-    deleteTheatreService
+    deleteTheatreService,
+    updateMovieInTheatreService
 } from "../services/theatre.service.js";
 
 
-const getTheatreByName = async (req, res) => {
-    const { q } = req.query;
-    if(!q) {
-        return res.status(400).json({
-            success: false,
-            message: "Search field required",
-        });
-    }
+const getTheatreByFilter = async (req, res) => {
     try {
-        const theatre = await getTheatreByNameService(q);
+        const theatre = await getTheatreByFilterService(req.query);
         return res.status(200).json({
             success: true,
             message: "Theatre fetched successfully",
@@ -80,7 +74,7 @@ const updateTheatre = async (req, res) => {
         const theatre = await updateTheatreService(req.body);
         return res.status(200).json({
             success: true,
-            message: "Theatre created successfully",
+            message: "Theatre updated successfully",
             data: theatre
         });
     }
@@ -98,7 +92,7 @@ const deleteTheatre = async (req, res) => {
         const theatre = await deleteTheatreService(req.body);
         return res.status(200).json({
             success: true,
-            message: "Theatre created successfully",
+            message: "Theatre deleted successfully",
             data: theatre
         });
     }
@@ -111,9 +105,31 @@ const deleteTheatre = async (req, res) => {
 };
 
 
+export const updateMovieInTheatre = async (req, res) => {
+    try {
+        const theatre = await updateMovieInTheatreService(
+            req.params.id, req.body.movies, insertFlag
+        );
+        return res.status(200).json({
+            success: true,
+            message: "Theatre fetched successfully",
+            data: theatre
+        });
+    }
+    catch(error) {
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.message || "Something went wrong"
+        });
+    }
+}
+
+
 export { 
-    getTheatreByName,
+    getTheatreByFilter,
     getTheatreById, 
     createTheatre, 
     updateTheatre, 
-    deleteTheatre };
+    deleteTheatre,
+    updateMovieInTheatre
+};

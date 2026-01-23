@@ -21,3 +21,8 @@ export const createTheatreValidator = z.object({
         .trim()
 
 }).strict();
+
+
+const cantEmpty = (filter) => {
+    z.string
+}

@@ -1,8 +1,19 @@
 import { Theatre } from "../models/theatre.model.js";
 
 
-const getTheatreByNameService = async (q) => {
-    const theatre = await Theatre.find({ $text: { $search: q } });
+const getTheatreByFilterService = async (q) => {
+    const filter = {};
+    if(q && q.name) {
+        filter.name = q.name;
+    }
+    if(q && q.pincode) {
+        filter.pincode = q.pincode;
+    }
+    if(q && q.city) {
+        filter.city = q.city;
+    }
+
+    const theatre = await Theatre.find({ $text: { $search: filter } });
     if(theatre.length === 0) {
         const error = new Error("Theater not found");
         error.statusCode = 404;
@@ -55,10 +66,35 @@ const deleteTheatreService = async (id) => {
 };
 
 
+export const updateMovieInTheatreService = async (theatreId, moviesIds, insertFlag) => {
+    const theatre = await Theatre.findById(theatreId);
+    if(!theatre) {
+        const error = new Error("Theatre not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    if(insertFlag) {
+        moviesIds.forEach(mi => {
+            theatre.movies.push(mi);
+        });
+    }
+    else if(!insertFlag && theatre.movies.length > 0) {
+        let moviesToDelete = theatre.movies;
+        moviesIds.forEach(mi => {
+            moviesToDelete = moviesToDelete.filter(mtd => mtd === mi);
+        });
+        theatre.movies = moviesToDelete;
+    }
+    await theatre.save();
+    return theatre.populate("movies");
+}
+
 export {  
-    getTheatreByNameService,
+    getTheatreByFilterService,
     getTheatreByIdService,
     createTheatreService,
     updateTheatreService,
-    deleteTheatreService
+    deleteTheatreService,
+    updateMovieInTheatreService
 };

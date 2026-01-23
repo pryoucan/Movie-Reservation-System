@@ -1,6 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const theatreSchema = new Schema({
+    movies: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Movie"
+    },
     name: {
         type: String,
         required: true,
@@ -31,9 +35,8 @@ const theatreSchema = new Schema({
 theatreSchema.index({
     name: "text",
     city: "text",
-    address: "text"
+    address: "text",
+    pincode: "text"
 });
-
-theatreSchema.index({ pincode: 1 });
 
 export const Theatre = mongoose.model("Theatre", theatreSchema);

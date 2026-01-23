@@ -2,7 +2,19 @@ import { Movie } from "../models/movie.model.js"
 
 
 const getMovieByNameService = async (q) => {
-    const movie = await Movie.find({ $text: { $search: q } });
+    if(Object.keys(q).length === 0) {
+        const error = new Error("Search field cannot be empty");
+        error.statusCode = 400;
+        throw error;
+    }
+    if(!q.title) {
+        const error = new Error("Invalid search filed");
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const { title } = q;
+    const movie = await Movie.find({ $text: { $search: title } });
     if(movie.length === 0) {
         const error = new Error("Movie not found");
         error.statusCode = 404;

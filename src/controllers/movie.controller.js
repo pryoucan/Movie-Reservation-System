@@ -8,14 +8,13 @@ import {
 
 
 const getMovieByName = async (req, res) => {
-    const { q } = req.query;
     try {
-        const movie = await getMovieByNameService(q);
+        const movie = await getMovieByNameService(req.query);
         return res.status(200).json({
             success: true,
             message: "Movie fetched successfully",
             data: movie
-        });
+});
     }
     catch (error) {
         return res.status(error?.statusCode || 500).json({
