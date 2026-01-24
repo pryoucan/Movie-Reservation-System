@@ -35,7 +35,7 @@ const getTheatreById = async (req, res) => {
         });
     }
     try {
-        const theatre = await getTheatreByIdService(IDBCursor);
+        const theatre = await getTheatreByIdService(id);
         return res.status(200).json({
             success: true,
             message: "Theatre fetched successfully",
@@ -105,7 +105,8 @@ const deleteTheatre = async (req, res) => {
 };
 
 
-export const updateMovieInTheatre = async (req, res) => {
+const updateMovieInTheatre = async (req, res) => {
+    const insertFlag = true;
     try {
         const theatre = await updateMovieInTheatreService(
             req.params.id, req.body.movies, insertFlag

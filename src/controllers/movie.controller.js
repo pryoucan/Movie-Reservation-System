@@ -14,7 +14,7 @@ const getMovieByName = async (req, res) => {
             success: true,
             message: "Movie fetched successfully",
             data: movie
-});
+        });
     }
     catch (error) {
         return res.status(error?.statusCode || 500).json({

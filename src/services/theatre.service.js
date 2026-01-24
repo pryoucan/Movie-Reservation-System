@@ -13,7 +13,8 @@ const getTheatreByFilterService = async (q) => {
         filter.city = q.city;
     }
 
-    const theatre = await Theatre.find({ $text: { $search: filter } });
+    // todo: searching filter by indexes is not working: Object error
+    const theatre = await Theatre.find(filter);
     if(theatre.length === 0) {
         const error = new Error("Theater not found");
         error.statusCode = 404;
@@ -66,7 +67,7 @@ const deleteTheatreService = async (id) => {
 };
 
 
-export const updateMovieInTheatreService = async (theatreId, moviesIds, insertFlag) => {
+const updateMovieInTheatreService = async (theatreId, moviesIds, insertFlag) => {
     const theatre = await Theatre.findById(theatreId);
     if(!theatre) {
         const error = new Error("Theatre not found");
@@ -74,9 +75,21 @@ export const updateMovieInTheatreService = async (theatreId, moviesIds, insertFl
         throw error;
     }
 
+    let cntr = 0;
     if(insertFlag) {
         moviesIds.forEach(mi => {
-            theatre.movies.push(mi);
+            if(theatre.movies.includes(mi)) {
+                cntr++;
+            }
+            else {
+                theatre.movies.push(mi);
+            }
+
+            if(cntr === moviesIds.length) {
+                const error = new Error("Movie is already present in theatre");
+                error.statusCode = 409;
+                throw error;
+            }
         });
     }
     else if(!insertFlag && theatre.movies.length > 0) {

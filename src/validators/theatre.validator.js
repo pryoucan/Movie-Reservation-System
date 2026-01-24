@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createTheatreValidator = z.object({
+const createTheatreValidator = z.object({
     name:
         z.string().min(3, "Name must be atleast 3 characters long")
         .trim(),
@@ -23,6 +23,17 @@ export const createTheatreValidator = z.object({
 }).strict();
 
 
-const cantEmpty = (filter) => {
-    z.string
-}
+const cantEmpty = (field) => {
+    return z.string().trim().min(1, `${field} cannot be empty`).optional();
+};
+
+const filterQuerySchema = z.object({
+    name: cantEmpty("name"),
+    city: cantEmpty("city"),
+    pincode: cantEmpty("pincode")
+            .refine((v) => v === undefined || /^\d{6}$/.test(v),
+        "pincode must be 6 digits")
+}).strict();
+
+
+export { createTheatreValidator, filterQuerySchema };
