@@ -3,7 +3,8 @@ import { Movie } from "../models/movie.model.js";
 import { ApiError } from "../utils/error_class.js";
 
 const getTheatreByFilterService = async (q) => {
-    const filter = {};
+    let pagination = {};
+    let filter = {};
     if(q && q.name) {
         filter.name = q.name;
     }
@@ -14,8 +15,24 @@ const getTheatreByFilterService = async (q) => {
         filter.city = q.city;
     }
 
-    // todo: searching filter by indexes is not working: Object error
-    const theatre = await Theatre.find(filter);
+    if(q && q.limit) {
+        pagination.limit = Number(q.limit);
+        if(isNaN(pagination.limit) 
+            || pagination.limit < 10 
+            || pagination.limit > 50) {
+            pagination.limit = 10;
+        }
+    }
+    if(q && q.skip) {
+        pagination.skip = Number(q.skip);
+        let perPage = (pagination.limit) ? pagination.limit : 10; 
+        if(isNaN(pagination.skip) || pagination.skip === 0) {
+            pagination.skip = 1;
+        }
+        pagination.skip = perPage * pagination.skip;
+    }
+
+    const theatre = await Theatre.find(filter, {}, pagination);
     if(theatre.length === 0) {
         const error = new Error("Theater not found");
         error.statusCode = 404;

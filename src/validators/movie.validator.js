@@ -22,7 +22,7 @@ const createMovieValidator = z.object({
         z.array(nonEmptyTrimmed("Genre required"))
         .min(1, "Genre required"),
 
-    language: nonEmptyTrimmed("Language required"),
+    originalLanguage: nonEmptyTrimmed("Language required"),
 
     duration: 
         z.string().trim().optional(),

@@ -22,7 +22,7 @@ const movieSchema = new Schema({
         type: [String],
         required: true
     },
-    language: {
+    originalLanguage: {
         type: String,
         required: true
     },
@@ -47,6 +47,10 @@ const movieSchema = new Schema({
 
 movieSchema.index({
     title: "text",
+    cast: "text",
+    genre: "text",
+    crew: "text",
+    synopsis: "text"
 });
 
 export const Movie = mongoose.model("Movie", movieSchema);

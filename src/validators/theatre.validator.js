@@ -32,15 +32,15 @@ const filterQuerySchemaValidator = z.object({
     city: cantEmpty("city"),
     pincode: cantEmpty("pincode")
             .refine((v) => v === undefined || /^\d{6}$/.test(v),
-        "pincode must be 6 digits")
+        "pincode must be 6 digits"),
+    limit: z.string().optional(),
+    skip: z.string().optional()
 }).strict();
 
 
 const updateMovieInTheatreValidator = z.object({
     movies:
         z.array(z.string()).min(1, "movies cannot be empty"),
-    insertFlag:
-        z.boolean()
 }).strict();
 
 export { 
