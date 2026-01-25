@@ -32,7 +32,8 @@ const getTheatreByFilterService = async (q) => {
         pagination.skip = perPage * pagination.skip;
     }
 
-    const theatre = await Theatre.find(filter, {}, pagination);
+    const theatre = await Theatre.find(filter)
+        .limit(pagination.limit).skip(pagination.skip);
     if(theatre.length === 0) {
         const error = new Error("Theater not found");
         error.statusCode = 404;
