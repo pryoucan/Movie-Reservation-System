@@ -5,7 +5,7 @@ import {
     updateTheatreService,
     deleteTheatreService,
     addMovieInTheatreService,
-    deleteMovieInTheatreService
+    deleteMovieInTheatreService,
 } from "../services/theatre.service.js";
 
 
@@ -146,5 +146,5 @@ export {
     updateTheatre, 
     deleteTheatre,
     addMovieInTheatre,
-    deleteMovieInTheatre
+    deleteMovieInTheatre,
 };

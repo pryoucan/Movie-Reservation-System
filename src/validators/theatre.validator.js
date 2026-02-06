@@ -34,7 +34,8 @@ const filterQuerySchemaValidator = z.object({
             .refine((v) => v === undefined || /^\d{6}$/.test(v),
         "pincode must be 6 digits"),
     limit: z.string().optional(),
-    skip: z.string().optional()
+    skip: z.string().optional(),
+    movies: z.string().optional()
 }).strict();
 
 

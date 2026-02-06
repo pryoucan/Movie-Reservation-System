@@ -30,7 +30,7 @@ const theatreSchema = new Schema({
         required: true,
         trim: true
     }
-});
+}, { timestamps: true });
 
 theatreSchema.index({
     name: "text",
